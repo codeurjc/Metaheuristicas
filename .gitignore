@@ -7,3 +7,6 @@ target/
 *.iml
 .idea/
 .eclipse
+.project
+.classpath
+.settings/
