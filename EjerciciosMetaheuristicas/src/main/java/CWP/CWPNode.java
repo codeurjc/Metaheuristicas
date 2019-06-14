@@ -1,10 +1,10 @@
-package MMDP;
+package CWP;
 
-public class Node implements Comparable<Node>{
+public class CWPNode implements Comparable<CWPNode>{
 	private int index;
-	private MMDPInstance instance;
+	private CWPInstance instance;
 
-	public Node(int index, MMDPInstance instance) {
+	public CWPNode(int index, CWPInstance instance) {
 		super();
 		this.index = index;
 		this.instance = instance;
@@ -18,21 +18,21 @@ public class Node implements Comparable<Node>{
 		this.index = index;
 	}
 
-	public MMDPInstance getInstance() {
+	public CWPInstance getInstance() {
 		return instance;
 	}
 
-	public void setInstance(MMDPInstance instance) {
+	public void setInstance(CWPInstance instance) {
 		this.instance = instance;
 	}
 
-	public double getDistanceToNode(Node n) {
+	public int isVertex(CWPNode n) {
 		return instance.getWeight(index, n.getIndex());
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		Node n = (Node) obj;
+		CWPNode n = (CWPNode) obj;
 
 		if (this.index == n.index)
 			return true;
@@ -46,7 +46,7 @@ public class Node implements Comparable<Node>{
 	}
 
 	@Override
-	public int compareTo(Node n) {
+	public int compareTo(CWPNode n) {
 		return this.index - n.index;
 	}
 

@@ -3,7 +3,7 @@ package MMDP;
 import java.util.Collections;
 import java.util.List;
 
-public class FirstImprovement {
+public class MMDPFirstImprovement {
 	private MMDPSolution improveSolution(MMDPSolution solution, Character order) {
 		boolean nodeChange;
 		MMDPInstance instance = solution.getInstance();
@@ -12,9 +12,9 @@ public class FirstImprovement {
 			nodeChange = false;
 
 			for (int i = 0; i < solution.getNodes().size(); i++) {
-				Node oldNode = solution.getNodes().get(i);
+				MMDPNode oldNode = solution.getNodes().get(i);
 
-				List<Node> nodes = instance.getNodes();
+				List<MMDPNode> nodes = instance.getNodes();
 				switch (order) {
 				case 'l':
 					Collections.sort(nodes);
@@ -25,7 +25,7 @@ public class FirstImprovement {
 				}
 								
 				for (int j = 0; j < instance.getNodes().size(); j++) {
-					Node newNode = instance.getNodes().get(j);
+					MMDPNode newNode = instance.getNodes().get(j);
 										
 					if (!solution.getNodes().contains(newNode)) {
 
@@ -33,6 +33,7 @@ public class FirstImprovement {
 						double oldSolution = solution.getTotalWeight();
 
 						if (newSolution > oldSolution) {
+							System.out.println("MEJORA");
 							solution.changeNode(oldNode, newNode);
 							nodeChange = true;
 							break;

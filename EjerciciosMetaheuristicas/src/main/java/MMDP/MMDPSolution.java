@@ -1,15 +1,14 @@
 package MMDP;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MMDPSolution implements Comparable<MMDPSolution>{
 	private MMDPInstance instance;
 	private double totalWeight;
-	private List<Node> nodes;
+	private List<MMDPNode> nodes;
 	
-	public MMDPSolution(MMDPInstance instance, List<Node> nodes) {
+	public MMDPSolution(MMDPInstance instance, List<MMDPNode> nodes) {
 		this.instance = instance;
 		this.nodes = nodes;
 		calculateWeight();
@@ -26,8 +25,8 @@ public class MMDPSolution implements Comparable<MMDPSolution>{
 		}
 	}
 	
-	public double calculateWeightChangeNode(Node oldNode, Node newNode) {
-		List<Node> newNodes = new ArrayList<>();
+	public double calculateWeightChangeNode(MMDPNode oldNode, MMDPNode newNode) {
+		List<MMDPNode> newNodes = new ArrayList<>();
 		
 		nodes.forEach(n -> {
 			if(n.equals(oldNode)) {
@@ -49,20 +48,22 @@ public class MMDPSolution implements Comparable<MMDPSolution>{
 		return newTotalWeight;
 	}
 	
-	public void changeNode(Node oldNode, Node newNode) {
+	public void changeNode(MMDPNode oldNode, MMDPNode newNode) {
 		for(int i=0; i < nodes.size(); i++) {
 			if(nodes.get(i).equals(oldNode)) {
 				nodes.set(i, newNode);
 				break;
 			}
 		}
+		
+		calculateWeight();
 	}
 
 	public double getTotalWeight() {
 		return totalWeight;
 	}
 
-	public List<Node> getNodes() {
+	public List<MMDPNode> getNodes() {
 		return nodes;
 	}
 

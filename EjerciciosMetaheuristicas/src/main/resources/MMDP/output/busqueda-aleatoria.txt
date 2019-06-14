@@ -1,0 +1,11 @@
+Busqueda Aleatoria
+GKD-Ic_1_n500_m50.txt	5.2421
+GKD-Ic_2_n500_m50.txt	4.51
+GKD-Ic_3_n500_m50.txt	5.1137
+GKD-Ic_4_n500_m50.txt	5.0853
+GKD-Ic_5_n500_m50.txt	4.859
+GKD-Ic_6_n500_m50.txt	5.3451
+GKD-Ic_7_n500_m50.txt	5.7123
+GKD-Ic_8_n500_m50.txt	5.3889
+GKD-Ic_9_n500_m50.txt	5.4653
+GKD-Ic_10_n500_m50.txt	5.1117

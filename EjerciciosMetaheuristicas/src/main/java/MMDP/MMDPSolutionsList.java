@@ -3,11 +3,11 @@ package MMDP;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-public class SolutionsList {
+public class MMDPSolutionsList {
 
 	private TreeSet<MMDPSolution> solutions;
 	
-	public SolutionsList(int elements) {
+	public MMDPSolutionsList(int elements) {
 		solutions = new TreeSet<>();
 	}
 	

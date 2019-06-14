@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomConstructive {
+public class MMDPRandomConstructive {
 	private MMDPInstance instance;
 
-	public RandomConstructive(MMDPInstance instance) {
+	public MMDPRandomConstructive(MMDPInstance instance) {
 		this.instance = instance;
 	}
 	
@@ -22,12 +22,12 @@ public class RandomConstructive {
 	}
 	
 	private MMDPSolution createSolution() {
-		List<Node> nodes = new ArrayList<>();
+		List<MMDPNode> nodes = new ArrayList<>();
 		Random rnd = new Random();
 		
 		do {
 			int randomIndex = rnd.nextInt(instance.getN());
-			Node node = new Node(randomIndex, instance);
+			MMDPNode node = new MMDPNode(randomIndex, instance);
 			
 			if(!nodes.contains(node)) {
 				nodes.add(node);

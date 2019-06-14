@@ -1,0 +1,11 @@
+Busqueda FirstImprovement Lexicografica
+GKD-Ic_1_n500_m50.txt	5.8643
+GKD-Ic_2_n500_m50.txt	5.6903
+GKD-Ic_3_n500_m50.txt	5.3917
+GKD-Ic_4_n500_m50.txt	5.7602
+GKD-Ic_5_n500_m50.txt	5.5317
+GKD-Ic_6_n500_m50.txt	5.7593
+GKD-Ic_7_n500_m50.txt	5.4231
+GKD-Ic_8_n500_m50.txt	5.0537
+GKD-Ic_9_n500_m50.txt	5.574
+GKD-Ic_10_n500_m50.txt	5.4314

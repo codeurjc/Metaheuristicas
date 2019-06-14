@@ -1,5 +1,5 @@
 
-package MMDP;
+package Common;
 
 public class ElementPrint implements Comparable<ElementPrint>{
 

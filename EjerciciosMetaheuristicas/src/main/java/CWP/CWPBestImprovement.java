@@ -1,13 +1,13 @@
-package MMDP;
+package CWP;
 
-public class BestImprovement {
+public class CWPBestImprovement {
 	
-	public MMDPSolution improveSolution(MMDPSolution solution) {
+	public CWPSolution improveSolution(CWPSolution solution) {
 		boolean nodeChange;
-		MMDPInstance instance = solution.getInstance();
+		CWPInstance instance = solution.getInstance();
 		double bestWeight;
-		Node bestOldNode;
-		Node bestNewNode;
+		CWPNode bestOldNode;
+		CWPNode bestNewNode;
 		
 		do {
 			nodeChange = false;
@@ -16,16 +16,15 @@ public class BestImprovement {
 			bestNewNode = null;
 			
 			for(int i=0; i < solution.getNodes().size(); i++) {
-				Node oldNode = solution.getNodes().get(i);
+				CWPNode oldNode = solution.getNodes().get(i);
 				
 				for(int j=0; j < instance.getNodes().size(); j++) {
-					Node newNode = instance.getNodes().get(j);
+					CWPNode newNode = instance.getNodes().get(j);
 					
-					if(!solution.getNodes().contains(newNode)) {
+					if(!oldNode.equals(newNode)) {
+						double newSolution = solution.calculateWeightChangeNode(oldNode, newNode);						
 						
-						double newSolution = solution.calculateWeightChangeNode(oldNode, newNode);
-
-						if(newSolution > bestWeight) {
+						if(newSolution < bestWeight) {
 							bestWeight = newSolution;
 							bestOldNode = oldNode;
 							bestNewNode = newNode;
