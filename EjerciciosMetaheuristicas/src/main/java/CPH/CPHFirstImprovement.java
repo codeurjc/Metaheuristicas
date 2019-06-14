@@ -3,7 +3,7 @@ package CPH;
 import java.util.Collections;
 import java.util.List;
 
-public class CWPFirstImprovement {
+public class CPHFirstImprovement {
 	private CPHSolution improveSolution(CPHSolution solution, Character order) {
 		boolean nodeChange;
 		CPHInstance instance = solution.getInstance();
@@ -27,16 +27,15 @@ public class CWPFirstImprovement {
 				for (int j = 0; j < instance.getNodes().size(); j++) {
 					CPHNode newHub = instance.getNodes().get(j);
 										
-					if (!solution.getHubs().contains(newHub)) {
-/*
-						double newSolution = solution.calculateWeightChangeNode(oldNode, newNode);
+					if (!solution.getHubs().contains(newHub)) {		
+						double newSolution = solution.calculateWeightChangeHub(oldHub, newHub);
 						double oldSolution = solution.getTotalWeight();
-
+	
 						if (newSolution < oldSolution) {
-							solution.changeNode(oldNode, newNode);
+							solution.changeHub(oldHub, newHub);
 							nodeChange = true;
 							break;
-						}*/
+						}
 					}
 				}
 			}
