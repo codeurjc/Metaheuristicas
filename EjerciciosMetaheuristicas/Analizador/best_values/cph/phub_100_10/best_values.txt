@@ -1,0 +1,10 @@
+phub_100_10_1.txt	1006
+phub_100_10_2.txt	966
+phub_100_10_3.txt	1026
+phub_100_10_4.txt	982
+phub_100_10_5.txt	1091
+phub_100_10_6.txt	954
+phub_100_10_7.txt	1034
+phub_100_10_8.txt	1043
+phub_100_10_9.txt	1031
+phub_100_10_10.txt	1005
