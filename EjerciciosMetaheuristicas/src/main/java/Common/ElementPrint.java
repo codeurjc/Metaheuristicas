@@ -1,7 +1,7 @@
 
 package Common;
 
-public class ElementPrint implements Comparable<ElementPrint>{
+public class ElementPrint{
 
 	private String nameFile;
 	private double result;
@@ -25,13 +25,5 @@ public class ElementPrint implements Comparable<ElementPrint>{
 
 	public void setResult(double result) {
 		this.result = result;
-	}
-
-	@Override
-	public int compareTo(ElementPrint e) {
-		int f1 = Integer.parseInt(nameFile.split("_")[1]);
-		int f2 = Integer.parseInt(e.getNameFile().split("_")[1]);
-		
-		return f1-f2;
 	}
 }

@@ -1,84 +1,128 @@
 package CPH;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import Common.ElementPrint;
+
 public class CPH {
 	private static String cphFolder = "src/main/resources/CHP";
-	private static String instancesFolder = cphFolder + "/phub_50_5";
+	private static String phub_50_5 = cphFolder + "/phub_50_5"; // Normal instance
+	private static String phub_100_10 = cphFolder + "/phub_100_10"; //Big instance
 	
 	public static void main(String[] args) {
 
-		File dirInstances = new File(instancesFolder);
+		File dirInstances = new File(phub_50_5);
+		File listFiles[] = dirInstances.listFiles();
+		Arrays.sort(listFiles); // Order show files
+		
+		List<ElementPrint> elementsPrint = new ArrayList<>();
 
+		for (File fileIntance : listFiles) {
+			CPHInstance instance = new CPHInstance(fileIntance);
+			instance.loadInstance();
+			
+			CPHSolution solution = calculateSolutionRandom(instance, 5000);
+			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight()));
+		}
 		
-		CPHInstance instance = new CPHInstance(new File(instancesFolder + "/phub_50_5_1.txt"));
-		instance.loadInstance();
-		
-		System.out.println(calculateSolutionBestImprovement(instance) + "\n");
+		writeResults(elementsPrint, "CPH Random ", "cph.txt");
 		
 	}
 	
-	public static int calculateSolutionRandom(CPHInstance instance) {
-		CPHRandomConstructive constructive = new CPHRandomConstructive(instance);
-		List<CPHSolution> randomSolutions = constructive.solutions(5000);
+	public static void writeResults(List<ElementPrint> fileSolutions, String title, String fileName) {
+		String fileOutput = cphFolder + "/output/" + fileName;
 		
-		CPHSolutionsList bestSolutions = new CPHSolutionsList(5000);
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutput))){
+			bw.write(title + "\n");
+			
+			fileSolutions.forEach(r -> {
+				try {
+					DecimalFormat df = new DecimalFormat("#.####");
+					
+					bw.write(r.getNameFile() + "\t" + df.format(r.getResult()) + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+			
+			System.out.println("File " + fileName + " saved correctly...");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static CPHSolution calculateSolutionRandom(CPHInstance instance, int solutions) {
+		CPHRandomConstructive constructive = new CPHRandomConstructive(instance);
+		List<CPHSolution> randomSolutions = constructive.solutions(solutions);
+		
+		System.out.print("Random solution - " + instance.getFile().getName() + ":\t");
+
+		CPHSolutionsList bestSolutions = new CPHSolutionsList(solutions);
 		bestSolutions.addAllSolutions(randomSolutions.iterator());
 		
-		System.out.println("Hubs: " + Arrays.toString(bestSolutions.getBestSolution().getHubs().toArray()));
-		System.out.println("Relations: " + Arrays.toString(bestSolutions.getBestSolution().getSpokes()));
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
 		
-		
-		return bestSolutions.getBestSolution().getTotalWeight();
+		return bestSolutions.getBestSolution();
 	}
 	
-	public static double calculateSolutionFirstImprovementRandom(CPHInstance instance) {
+	public static CPHSolution calculateSolutionFirstImprovementRandom(CPHInstance instance, int solutions) {
 		CPHRandomConstructive constructive = new CPHRandomConstructive(instance);
-		List<CPHSolution> randomSolutions = constructive.solutions(5000);
+		List<CPHSolution> randomSolutions = constructive.solutions(solutions);
 		CPHFirstImprovement fi = new CPHFirstImprovement();
+		CPHSolutionsList bestSolutions = new CPHSolutionsList(solutions);
 		
+		System.out.print("First Improvement Random - " + instance.getFile().getName() + ":\t");
+
 		for(int i=0; i < randomSolutions.size(); i++) {
 			CPHSolution imSolution =  fi.improveSolutionRandom(randomSolutions.get(i));
-			randomSolutions.set(i, imSolution);
+			bestSolutions.addSolution(imSolution);
 		}
 		
-		CPHSolutionsList bestSolutions = new CPHSolutionsList(5000);
-		bestSolutions.addAllSolutions(randomSolutions.iterator());
-				
-		return bestSolutions.getBestSolution().getTotalWeight();
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+						
+		return bestSolutions.getBestSolution();
 	}
 	
-	public static double calculateSolutionFirstImprovementLexicographical(CPHInstance instance) {
+	public static CPHSolution calculateSolutionFirstImprovementLexicographical(CPHInstance instance, int solutions) {
 		CPHRandomConstructive constructive = new CPHRandomConstructive(instance);
-		List<CPHSolution> randomSolutions = constructive.solutions(5000);
+		List<CPHSolution> randomSolutions = constructive.solutions(solutions);
 		CPHFirstImprovement fi = new CPHFirstImprovement();
-		
+		CPHSolutionsList bestSolutions = new CPHSolutionsList(solutions);
+
+		System.out.print("First Improvement Lexicographical - " + instance.getFile().getName() + ":\t");
+
 		for(int i=0; i < randomSolutions.size(); i++) {
 			CPHSolution imSolution =  fi.improveSolutionLexicographical(randomSolutions.get(i));
-			randomSolutions.set(i, imSolution);
+			bestSolutions.addSolution(imSolution);
 		}
 		
-		CPHSolutionsList bestSolutions = new CPHSolutionsList(5000);
-		bestSolutions.addAllSolutions(randomSolutions.iterator());
-				
-		return bestSolutions.getBestSolution().getTotalWeight();
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+						
+		return bestSolutions.getBestSolution();
 	}
 	
-	public static double calculateSolutionBestImprovement(CPHInstance instance) {
+	public static CPHSolution calculateSolutionBestImprovement(CPHInstance instance, int solutions) {
 		CPHRandomConstructive constructive = new CPHRandomConstructive(instance);
-		List<CPHSolution> randomSolutions = constructive.solutions(5000);
+		List<CPHSolution> randomSolutions = constructive.solutions(solutions);
 		CPHBestImprovement fi = new CPHBestImprovement();
+		CPHSolutionsList bestSolutions = new CPHSolutionsList(solutions);
 		
+		System.out.print("Best Improvement - " + instance.getFile().getName() + ":\t");
+
 		for(int i=0; i < randomSolutions.size(); i++) {
 			CPHSolution imSolution =  fi.improveSolution(randomSolutions.get(i));
-			randomSolutions.set(i, imSolution);
+			bestSolutions.addSolution(imSolution);
 		}
 		
-		CPHSolutionsList bestSolutions = new CPHSolutionsList(5000);
-		bestSolutions.addAllSolutions(randomSolutions.iterator());
-				
-		return bestSolutions.getBestSolution().getTotalWeight();
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+						
+		return bestSolutions.getBestSolution();
 	}
 }

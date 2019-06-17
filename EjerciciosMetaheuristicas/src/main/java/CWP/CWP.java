@@ -1,95 +1,126 @@
 package CWP;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import Common.ElementPrint;
 
 public class CWP {
 	private static String cwpFolder = "src/main/resources/CWP";
-	private static String instancesFolder = cwpFolder + "/CW_hb";
+	private static String CW_hb = cwpFolder + "/CW_hb"; // Normal instance 
 
 	public static void main(String[] args) {
+		File dirInstances = new File(CW_hb);
+		File listFiles[] = dirInstances.listFiles();
+		Arrays.sort(listFiles); // Order show files
+		
+		List<ElementPrint> elementsPrint = new ArrayList<>();
 
-		File dirInstances = new File(instancesFolder);
-
-		CWPInstance instance = new CWPInstance(new File(instancesFolder + "/lns__131.mtx.rnd"));
-		instance.loadInstance();
-		
-		System.out.println("Random best solution: " + calculateSolutionRandom(instance));	
-		System.out.println(calculateSolutionBestImprovement(instance, 5000));		
-	}
-	
-	public static int calculateSolutionRandom(CWPInstance instance) {
-		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
-		List<CWPSolution> randomSolutions = constructive.solutions(5000);
-		
-		CWPSolutionsList bestSolutions = new CWPSolutionsList(5000);
-		bestSolutions.addAllSolutions(randomSolutions.iterator());
-					
-		return bestSolutions.getBestSolution().getTotalWeight();
-	}
-	
-	public static double calculateSolutionFirstImprovementRandom(CWPInstance instance) {
-		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
-		List<CWPSolution> randomSolutions = constructive.solutions(5000);
-		CWPFirstImprovement fi = new CWPFirstImprovement();
-		
-		for(int i=0; i < randomSolutions.size(); i++) {
-			CWPSolution imSolution =  fi.improveSolutionRandom(randomSolutions.get(i));
-			randomSolutions.set(i, imSolution);
+		for (File fileIntance : listFiles) {
+			CWPInstance instance = new CWPInstance(fileIntance);
+			instance.loadInstance();
+			
+			CWPSolution solution = calculateSolutionRandom(instance, 5000);
+			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight()));
 		}
 		
-		CWPSolutionsList bestSolutions = new CWPSolutionsList(5000);
-		bestSolutions.addAllSolutions(randomSolutions.iterator());
-				
-		return bestSolutions.getBestSolution().getTotalWeight();
+		writeResults(elementsPrint, "CWP Random ", "cwp.txt");
 	}
 	
-	public static double calculateSolutionFirstImprovementLexicographical(CWPInstance instance) {
-		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
-		List<CWPSolution> randomSolutions = constructive.solutions(5000);
-		CWPFirstImprovement fi = new CWPFirstImprovement();
+	public static void writeResults(List<ElementPrint> fileSolutions, String title, String fileName) {
+		String fileOutput = cwpFolder + "/output/" + fileName;
 		
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(fileOutput))){
+			bw.write(title + "\n");
+			
+			fileSolutions.forEach(r -> {
+				try {
+					DecimalFormat df = new DecimalFormat("#.####");
+					
+					bw.write(r.getNameFile() + "\t" + df.format(r.getResult()) + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+			
+			System.out.println("File " + fileName + " saved correctly...");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static CWPSolution calculateSolutionRandom(CWPInstance instance, int solutions) {
+		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
+		List<CWPSolution> randomSolutions = constructive.solutions(solutions);
+		
+		System.out.print("Random solution - " + instance.getFile().getName() + ":\t");
+
+		CWPSolutionsList bestSolutions = new CWPSolutionsList(solutions);
+		bestSolutions.addAllSolutions(randomSolutions.iterator());
+		
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+					
+		return bestSolutions.getBestSolution();
+	}
+	
+	public static CWPSolution calculateSolutionFirstImprovementRandom(CWPInstance instance, int solutions) {
+		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
+		List<CWPSolution> randomSolutions = constructive.solutions(solutions);
+		CWPFirstImprovement fi = new CWPFirstImprovement();
+		CWPSolutionsList bestSolutions = new CWPSolutionsList(solutions);
+		
+		System.out.print("First Improvement Random - " + instance.getFile().getName() + ":\t");
+
+		for(int i=0; i < randomSolutions.size(); i++) {
+			CWPSolution imSolution =  fi.improveSolutionRandom(randomSolutions.get(i));
+			bestSolutions.addSolution(imSolution);
+		}
+		
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+						
+		return bestSolutions.getBestSolution();
+	}
+	
+	public static CWPSolution calculateSolutionFirstImprovementLexicographical(CWPInstance instance, int solutions) {
+		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
+		List<CWPSolution> randomSolutions = constructive.solutions(solutions);
+		CWPFirstImprovement fi = new CWPFirstImprovement();
+		CWPSolutionsList bestSolutions = new CWPSolutionsList(solutions);
+
+		System.out.print("First Improvement Lexicographical - " + instance.getFile().getName() + ":\t");
+
 		for(int i=0; i < randomSolutions.size(); i++) {
 			CWPSolution imSolution =  fi.improveSolutionLexicographical(randomSolutions.get(i));
 			randomSolutions.set(i, imSolution);
+			bestSolutions.addSolution(imSolution);
 		}
 		
-		CWPSolutionsList bestSolutions = new CWPSolutionsList(5000);
-		bestSolutions.addAllSolutions(randomSolutions.iterator());
-				
-		return bestSolutions.getBestSolution().getTotalWeight();
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+						
+		return bestSolutions.getBestSolution();
 	}
 	
-	public static double calculateSolutionBestImprovement(CWPInstance instance, int numRandomSolutions) {
+	public static CWPSolution calculateSolutionBestImprovement(CWPInstance instance, int solutions) {
 		CWPRandomConstructive constructive = new CWPRandomConstructive(instance);
-		List<CWPSolution> randomSolutions = constructive.solutions(numRandomSolutions);
-		CWPSolutionsList bestSolutions = new CWPSolutionsList(numRandomSolutions);
+		List<CWPSolution> randomSolutions = constructive.solutions(solutions);
+		CWPSolutionsList bestSolutions = new CWPSolutionsList(solutions);
 		CWPBestImprovement fi = new CWPBestImprovement();
 		
-		System.out.println("Improve the random solutions with the method 'Best Improvement'");
-		System.out.println("Calculate solution from the file: " + instance.getFile().getName());
-		System.out.println("Generate " + "'" + numRandomSolutions + "'" + " random solutions");
-		
-		long startTime = System.currentTimeMillis();
-		System.out.print("Best solutions found: [\t");
-		int weightBestSolution = -1;
+		System.out.print("Best Improvement - " + instance.getFile().getName() + ":\t");
+
 		for(int i=0; i < randomSolutions.size(); i++) {
 			CWPSolution imSolution =  fi.improveSolution(randomSolutions.get(i));
 			bestSolutions.addSolution(imSolution);
-			int weightSolution = bestSolutions.getBestSolution().getTotalWeight();
-			System.out.println("Vuelta: " + i);
-			if(weightSolution < weightBestSolution || weightBestSolution == -1) {
-				weightBestSolution = weightSolution;
-				
-				System.out.print(weightBestSolution + "\t");
-			}
 		}
-		long endTime = System.currentTimeMillis();
 		
-		System.out.print("]\n");
-		System.out.println("Total time: " + ((endTime - startTime)/60000) + " minutes");
-		
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
 						
-		return bestSolutions.getBestSolution().getTotalWeight();
+		return bestSolutions.getBestSolution();
 	}
 }
