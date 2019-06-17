@@ -41,8 +41,6 @@ public class CPHSolution implements Comparable<CPHSolution>{
 				newHubs.add(h);
 			}
 		});
-		//System.out.println(Arrays.toString(hubs.toArray()));
-		//System.out.println(Arrays.toString(newHubs.toArray()));
 		
 		int newSpokes[] = new int[spokes.length];
 		for (int i=0; i < spokes.length; i++) {
@@ -52,11 +50,6 @@ public class CPHSolution implements Comparable<CPHSolution>{
 				newSpokes[i] = spokes[i];
 			}
 		}
-		
-		//System.out.println(Arrays.toString(spokes));
-		//System.out.println(Arrays.toString(newSpokes));
-
-		//System.out.println("---------------------");
 		
 		int newTotalWeight = 0;
 		for(int i=0; i < newHubs.size(); i++) {
@@ -105,6 +98,26 @@ public class CPHSolution implements Comparable<CPHSolution>{
 
 	public int[] getSpokes() {
 		return spokes;
+	}
+	
+	@Override
+	public String toString() {
+		List<List<Integer>> printSolution = new ArrayList<>();
+		
+		hubs.forEach(hub -> {
+			List<Integer> elements = new ArrayList<>();
+			elements.add(hub.getIndex());
+			
+			for(int i=0; i < spokes.length; i++) {
+				if(spokes[i] == hub.getIndex()) {
+					elements.add(i);
+				}
+			}
+			
+			printSolution.add(elements);
+		});
+		
+		return Arrays.toString(printSolution.toArray());
 	}
 
 	@Override

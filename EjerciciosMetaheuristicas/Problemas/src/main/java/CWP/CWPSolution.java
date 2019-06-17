@@ -1,6 +1,7 @@
 package CWP;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CWPSolution implements Comparable<CWPSolution>{
@@ -89,6 +90,11 @@ public class CWPSolution implements Comparable<CWPSolution>{
 
 	public CWPInstance getInstance() {
 		return instance;
+	}
+	
+	@Override
+	public String toString() {
+		return Arrays.toString(this.nodes.toArray());
 	}
 
 	@Override

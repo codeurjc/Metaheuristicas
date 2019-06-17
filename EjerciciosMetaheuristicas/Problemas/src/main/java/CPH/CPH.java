@@ -29,7 +29,7 @@ public class CPH {
 			instance.loadInstance();
 			
 			CPHSolution solution = calculateSolutionRandom(instance, 5000);
-			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight()));
+			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
 		}
 		
 		writeResults(elementsPrint, "CPH Random ", "cph.txt");
@@ -44,9 +44,9 @@ public class CPH {
 			
 			fileSolutions.forEach(r -> {
 				try {
-					DecimalFormat df = new DecimalFormat("#.####");
+					DecimalFormat df = new DecimalFormat("#");
 					
-					bw.write(r.getNameFile() + "\t" + df.format(r.getResult()) + "\n");
+					bw.write(r.getNameFile() + "\t" + df.format(r.getResult()) + "\t" + r.getRepresentation() + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -67,7 +67,7 @@ public class CPH {
 		CPHSolutionsList bestSolutions = new CPHSolutionsList(solutions);
 		bestSolutions.addAllSolutions(randomSolutions.iterator());
 		
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 		
 		return bestSolutions.getBestSolution();
 	}
@@ -85,7 +85,7 @@ public class CPH {
 			bestSolutions.addSolution(imSolution);
 		}
 		
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 						
 		return bestSolutions.getBestSolution();
 	}
@@ -103,7 +103,7 @@ public class CPH {
 			bestSolutions.addSolution(imSolution);
 		}
 		
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 						
 		return bestSolutions.getBestSolution();
 	}
@@ -121,7 +121,7 @@ public class CPH {
 			bestSolutions.addSolution(imSolution);
 		}
 		
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 						
 		return bestSolutions.getBestSolution();
 	}

@@ -29,7 +29,7 @@ public class MMDP {
 			instance.loadInstance();
 			
 			MMDPSolution solution = calculateRandomSolution(instance, 5000);
-			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight()));
+			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
 		}
 		
 		writeResults(elementsPrint, "MMDP Random ", "mmdp.txt");
@@ -45,7 +45,7 @@ public class MMDP {
 				try {
 					DecimalFormat df = new DecimalFormat("#.####");
 					
-					bw.write(r.getNameFile() + "\t" + df.format(r.getResult()) + "\n");
+					bw.write(r.getNameFile() + "\t" + df.format(r.getResult()) + "\t" + r.getRepresentation() + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -66,7 +66,7 @@ public class MMDP {
 		MMDPSolutionsList bestSolutions = new MMDPSolutionsList(solutions);
 		bestSolutions.addAllSolutions(randomSolutions.iterator());
 		
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 		
 		return bestSolutions.getBestSolution();
 	}
@@ -84,7 +84,7 @@ public class MMDP {
 			bestSolutions.addSolution(imSolution);
 		}
 		
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 				
 		return bestSolutions.getBestSolution();
 	}
@@ -102,7 +102,7 @@ public class MMDP {
 			bestSolutions.addSolution(imSolution);
 		}
 			
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 		
 		return bestSolutions.getBestSolution();
 	}
@@ -120,7 +120,7 @@ public class MMDP {
 			bestSolutions.addSolution(imSolution);
 		}
 				 
-		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\n");
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 				
 		return bestSolutions.getBestSolution();
 	}
