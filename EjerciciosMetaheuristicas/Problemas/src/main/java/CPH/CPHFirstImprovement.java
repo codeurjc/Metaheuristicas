@@ -7,23 +7,22 @@ public class CPHFirstImprovement {
 	private CPHSolution improveSolution(CPHSolution solution, Character order) {
 		boolean nodeChange;
 		CPHInstance instance = solution.getInstance();
-
+		List<CPHNode> nodes = instance.getNodes();
+		switch (order) {
+		case 'l':
+			Collections.sort(nodes);
+			break;
+		case 'r':
+			Collections.shuffle(nodes);
+			break;
+		}
+		
 		do {
 			nodeChange = false;
 
 			for (int i = 0; i < solution.getHubs().size(); i++) {
 				CPHNode oldHub = solution.getHubs().get(i);
-
-				List<CPHNode> nodes = instance.getNodes();
-				switch (order) {
-				case 'l':
-					Collections.sort(nodes);
-					break;
-				case 'r':
-					Collections.shuffle(nodes);
-					break;
-				}
-								
+						
 				for (int j = 0; j < instance.getNodes().size(); j++) {
 					CPHNode newHub = instance.getNodes().get(j);
 										

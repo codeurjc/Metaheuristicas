@@ -7,22 +7,22 @@ public class MMDPFirstImprovement {
 	private MMDPSolution improveSolution(MMDPSolution solution, Character order) {
 		boolean nodeChange;
 		MMDPInstance instance = solution.getInstance();
-
+		List<MMDPNode> nodes = instance.getNodes();
+		
+		switch (order) {
+		case 'l':
+			Collections.sort(nodes);
+			break;
+		case 'r':
+			Collections.shuffle(nodes);
+			break;
+		}
+		
 		do {
 			nodeChange = false;
 
 			for (int i = 0; i < solution.getNodes().size(); i++) {
 				MMDPNode oldNode = solution.getNodes().get(i);
-
-				List<MMDPNode> nodes = instance.getNodes();
-				switch (order) {
-				case 'l':
-					Collections.sort(nodes);
-					break;
-				case 'r':
-					Collections.shuffle(nodes);
-					break;
-				}
 								
 				for (int j = 0; j < instance.getNodes().size(); j++) {
 					MMDPNode newNode = instance.getNodes().get(j);
@@ -33,7 +33,6 @@ public class MMDPFirstImprovement {
 						double oldSolution = solution.getTotalWeight();
 
 						if (newSolution > oldSolution) {
-							System.out.println("MEJORA");
 							solution.changeNode(oldNode, newNode);
 							nodeChange = true;
 							break;

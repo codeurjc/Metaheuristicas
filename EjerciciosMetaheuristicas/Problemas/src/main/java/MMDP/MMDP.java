@@ -18,7 +18,7 @@ public class MMDP {
 	private static String GKD_IC_11_20 = mmdpFolder + "/GKD-Ic_11_20"; // Big instance
 	
 	public static void main(String[] args) {
-		File dirInstances = new File(GKD_Ia);
+		File dirInstances = new File(GKD_IC_1_10);
 		File listFiles[] = dirInstances.listFiles();
 		Arrays.sort(listFiles); // Order show files
 
@@ -28,7 +28,7 @@ public class MMDP {
 			MMDPInstance instance = new MMDPInstance(fileIntance);
 			instance.loadInstance();
 			
-			MMDPSolution solution = calculateRandomSolution(instance, 5000);
+			MMDPSolution solution = calculateBestImprovementSolution(instance, 1);
 			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
 		}
 		
@@ -127,14 +127,19 @@ public class MMDP {
 	
 	public static MMDPSolution calculateTabuSearchSolution(MMDPInstance instance) {
 		MMDPRandomConstructive constructive = new MMDPRandomConstructive(instance);
+		List<MMDPSolution> randomSolutions = constructive.solutions(1);
 		MMDPTabuSearch tabuSearch = new MMDPTabuSearch();
+		MMDPSolutionsList bestSolutions = new MMDPSolutionsList(1);
 		
 		System.out.print("TabuSearch - " + instance.getFile().getName() + ":\t");
 		
-		MMDPSolution solution = tabuSearch.improveSolution(constructive.solutions(1).get(0));
-				 
-		System.out.print(solution.getTotalWeight() + "\t" + solution.toString() + "\n");
-				
-		return solution;
+		for(int i=0; i < randomSolutions.size(); i++) {
+			MMDPSolution imSolution =  tabuSearch.improveSolution(randomSolutions.get(i));
+			bestSolutions.addSolution(imSolution);
+		}
+						 
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
+		
+		return bestSolutions.getBestSolution();
 	}
 }
