@@ -124,4 +124,17 @@ public class MMDP {
 				
 		return bestSolutions.getBestSolution();
 	}
+	
+	public static MMDPSolution calculateTabuSearchSolution(MMDPInstance instance) {
+		MMDPRandomConstructive constructive = new MMDPRandomConstructive(instance);
+		MMDPTabuSearch tabuSearch = new MMDPTabuSearch();
+		
+		System.out.print("TabuSearch - " + instance.getFile().getName() + ":\t");
+		
+		MMDPSolution solution = tabuSearch.improveSolution(constructive.solutions(1).get(0));
+				 
+		System.out.print(solution.getTotalWeight() + "\t" + solution.toString() + "\n");
+				
+		return solution;
+	}
 }
