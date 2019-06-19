@@ -42,7 +42,7 @@ public class MMDPSolution implements Comparable<MMDPSolution>{
 		
 		for(int i=0; i < newNodes.size(); i++) {
 			for(int j=i + 1; j < newNodes.size(); j++) {
-				newTotalWeight = Math.min(totalWeight, newNodes.get(i).getDistanceToNode(newNodes.get(j)));
+				newTotalWeight = Math.min(newTotalWeight, newNodes.get(i).getDistanceToNode(newNodes.get(j)));
 			}
 		}
 				
