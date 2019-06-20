@@ -18,7 +18,7 @@ public class MMDP {
 	private static String GKD_IC_11_20 = mmdpFolder + "/GKD-Ic_11_20"; // Big instance
 	
 	public static void main(String[] args) {
-		File dirInstances = new File(GKD_IC_1_10);
+		File dirInstances = new File(GKD_Ia);
 		File listFiles[] = dirInstances.listFiles();
 		Arrays.sort(listFiles); // Order show files
 
@@ -28,8 +28,10 @@ public class MMDP {
 			MMDPInstance instance = new MMDPInstance(fileIntance);
 			instance.loadInstance();
 			
-			MMDPSolution solution = calculateBestImprovementSolution(instance, 1);
+			MMDPSolution solution = calculateRandomSolution(instance, 5000);
 			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
+			
+			solution.randomChangeNodesVNS(solution.getInstance().getM() / 2);
 		}
 		
 		writeResults(elementsPrint, "MMDP Random ", "mmdp.txt");
@@ -125,16 +127,34 @@ public class MMDP {
 		return bestSolutions.getBestSolution();
 	}
 	
-	public static MMDPSolution calculateTabuSearchSolution(MMDPInstance instance) {
+	public static MMDPSolution calculateTabuSearchSolution(MMDPInstance instance, int solutions) {
 		MMDPRandomConstructive constructive = new MMDPRandomConstructive(instance);
-		List<MMDPSolution> randomSolutions = constructive.solutions(1);
+		List<MMDPSolution> randomSolutions = constructive.solutions(solutions);
 		MMDPTabuSearch tabuSearch = new MMDPTabuSearch();
-		MMDPSolutionsList bestSolutions = new MMDPSolutionsList(1);
+		MMDPSolutionsList bestSolutions = new MMDPSolutionsList(solutions);
 		
 		System.out.print("TabuSearch - " + instance.getFile().getName() + ":\t");
 		
 		for(int i=0; i < randomSolutions.size(); i++) {
 			MMDPSolution imSolution =  tabuSearch.improveSolution(randomSolutions.get(i));
+			bestSolutions.addSolution(imSolution);
+		}
+						 
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
+		
+		return bestSolutions.getBestSolution();
+	}
+	
+	public static MMDPSolution calculateVNSSolution(MMDPInstance instance, int solutions) {
+		MMDPRandomConstructive constructive = new MMDPRandomConstructive(instance);
+		List<MMDPSolution> randomSolutions = constructive.solutions(solutions);
+		MMDPVariableNeighborhoodSearch vns = new MMDPVariableNeighborhoodSearch();
+		MMDPSolutionsList bestSolutions = new MMDPSolutionsList(solutions);
+		
+		System.out.print("VNS - " + instance.getFile().getName() + ":\t");
+		
+		for(int i=0; i < randomSolutions.size(); i++) {
+			MMDPSolution imSolution =  vns.improveSolution(randomSolutions.get(i));
 			bestSolutions.addSolution(imSolution);
 		}
 						 
