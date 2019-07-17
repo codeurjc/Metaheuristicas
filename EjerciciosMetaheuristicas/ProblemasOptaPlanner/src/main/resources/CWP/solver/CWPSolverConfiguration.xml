@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+	<!-- Domain model configuration -->
+	<solutionClass>CWP.Solution</solutionClass>
+	<entityClass>CWP.Order</entityClass>
+
+	<!-- Score configuration -->
+	<scoreDirectorFactory>
+		<easyScoreCalculatorClass>CWP.CWPEasyCalculator</easyScoreCalculatorClass>
+		<!--<scoreDrl>org/optaplanner/examples/courseScheduleScoreRules.drl</scoreDrl> -->
+	</scoreDirectorFactory>
+
+	<!-- Optimization algorithms configuration -->
+	<termination>
+		<secondsSpentLimit>220</secondsSpentLimit>
+	</termination>
+	
+	<constructionHeuristic>
+    	<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  	</constructionHeuristic>
+  	
+  	<localSearch>
+    	<localSearchType>HILL_CLIMBING</localSearchType>
+  	</localSearch>
+</solver>

@@ -1,0 +1,26 @@
+package MDP.solver
+    dialect "java"
+
+import org.optaplanner.core.api.score.buildin.simple.SimpleScoreHolder;
+import MDP.Diversity;
+import MDP.NodeUsed;
+
+global SimpleScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+
+rule "Calculate maximun"
+    when
+        $diversity : Diversity(previousStandstill != null)
+        not Diversity(previousStandstill == $diversity)
+        $node : NodeUsed()
+    then
+        scoreHolder.addConstraintMatch(kcontext, (int)$diversity.getDistanceTo($node));
+    end

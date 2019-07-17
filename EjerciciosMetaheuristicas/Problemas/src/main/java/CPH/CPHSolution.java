@@ -77,6 +77,9 @@ public class CPHSolution implements Comparable<CPHSolution>{
 			}
 		}
 		
+		spokes[oldHub.getIndex()] = newHub.getIndex();
+		spokes[newHub.getIndex()] = -1;
+		
 		calculateWeight();
 	}
 

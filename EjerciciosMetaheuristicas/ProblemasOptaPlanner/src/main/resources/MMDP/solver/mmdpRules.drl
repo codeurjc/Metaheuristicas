@@ -1,0 +1,47 @@
+package MMDP.solver
+    dialect "java"
+
+import org.optaplanner.core.api.score.buildin.hardsoftdouble.HardSoftDoubleScoreHolder;
+import MMDP.Diversity;
+
+global HardSoftDoubleScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+rule "No empty nodes"
+    when
+        Diversity(node == null)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+    end
+
+/*rule "No equals nodes"
+     when
+         Diversity(node != null, $node: node)
+         accumulate(
+            $n2: Diversity(node != null, node == $node);
+            $num: sum(1);
+            $num >= 2
+         )
+     then
+         scoreHolder.addHardConstraintMatch(kcontext, -2);
+     end*/
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+
+rule "Calculate minimum"
+    when
+        $n1: Diversity(node != null)
+
+         accumulate(
+             $n2: Diversity(node != null, $n1.getNode().getDistanceToNode($n2.getNode()) > 0);
+             $distances: min($n1.getNode().getDistanceToNode($n2.getNode()))
+         )
+
+    then
+        //System.out.println((double) $distances);
+        scoreHolder.addSoftConstraintMatch(kcontext, (double) $distances);
+    end

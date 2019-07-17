@@ -14,6 +14,7 @@ public class CWPInstance {
 	private File file;
 	private int vertex;
 	private int edge;
+	List<CWPWeight> nodesConexion;
 	private List<CWPNode> nodes;
 	private int weights[][];
 
@@ -62,6 +63,26 @@ public class CWPInstance {
 				System.out.format("[%d, %d] = %d \n", i, j, weights[i][j]);
 			}
 		}
+	}
+	
+	public List<CWPWeight> getNodesConexion(){
+		if(nodesConexion == null) {
+			nodesConexion = new ArrayList<>();
+			
+			nodes.forEach(node -> {
+				int weight = 0;
+				
+				for(int i=0; i < weights[node.getIndex()].length; i++) {
+					if(weights[node.getIndex()][i] == 1) {
+						weight++;
+					}
+				}
+				
+				nodesConexion.add(new CWPWeight(node, weight));
+			});
+		}
+		
+		return nodesConexion;
 	}
 	
 	public List<CWPNode> getNodes() {

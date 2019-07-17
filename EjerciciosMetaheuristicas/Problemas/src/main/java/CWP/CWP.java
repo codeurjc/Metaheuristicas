@@ -23,14 +23,15 @@ public class CWP {
 		List<ElementPrint> elementsPrint = new ArrayList<>();
 
 		for (File fileIntance : listFiles) {
-			CWPInstance instance = new CWPInstance(fileIntance);
+			CWPInstance instance = new CWPInstance(new File(CW_hb + "/ash85.mtx.rnd"));
 			instance.loadInstance();
-			
-			CWPSolution solution = calculateSolutionRandom(instance, 5000);
+						
+			CWPSolution solution = calculateSolutionFirstImprovementRandom(instance, 2);
 			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
+			break;
 		}
 		
-		writeResults(elementsPrint, "CWP Random ", "cwp.txt");
+		//writeResults(elementsPrint, "CWP Random ", "cwp.txt");
 	}
 	
 	public static void writeResults(List<ElementPrint> fileSolutions, String title, String fileName) {
@@ -116,6 +117,24 @@ public class CWP {
 
 		for(int i=0; i < randomSolutions.size(); i++) {
 			CWPSolution imSolution =  fi.improveSolution(randomSolutions.get(i));
+			bestSolutions.addSolution(imSolution);
+		}
+		
+		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
+						
+		return bestSolutions.getBestSolution();
+	}
+	
+	public static CWPSolution calculateSolutionGRASP(CWPInstance instance, int solutions) {
+		CWPGraspConstructive constructive = new CWPGraspConstructive(instance);		
+		List<CWPSolution> randomSolutions = constructive.solutions(solutions);
+		CWPSolutionsList bestSolutions = new CWPSolutionsList(solutions);
+		CWPFirstImprovement fi = new CWPFirstImprovement();
+		
+		System.out.print("GRASP - " + instance.getFile().getName() + ":\t");
+
+		for(int i=0; i < randomSolutions.size(); i++) {
+			CWPSolution imSolution =  fi.improveSolutionLexicographical(randomSolutions.get(i));
 			bestSolutions.addSolution(imSolution);
 		}
 		

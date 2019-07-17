@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+	<!-- Domain model configuration -->
+	<solutionClass>MMDP.Solution</solutionClass>
+	<entityClass>MMDP.Diversity</entityClass>
+
+	<!-- Score configuration -->
+	<scoreDirectorFactory>
+		<!--<easyScoreCalculatorClass>MMDP.MMDPEasyCalculator</easyScoreCalculatorClass>-->
+		<scoreDrl>MMDP/solver/mmdpRules.drl</scoreDrl>
+	</scoreDirectorFactory>
+
+	<!-- Optimization algorithms configuration -->
+	<termination>
+		<secondsSpentLimit>30</secondsSpentLimit>
+	</termination>
+</solver>

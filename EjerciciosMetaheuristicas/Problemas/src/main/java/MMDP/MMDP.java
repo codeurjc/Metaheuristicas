@@ -28,10 +28,8 @@ public class MMDP {
 			MMDPInstance instance = new MMDPInstance(fileIntance);
 			instance.loadInstance();
 			
-			MMDPSolution solution = calculateRandomSolution(instance, 5000);
+			MMDPSolution solution = calculateVNSSolution(instance, 1);
 			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
-			
-			solution.randomChangeNodesVNS(solution.getInstance().getM() / 2);
 		}
 		
 		writeResults(elementsPrint, "MMDP Random ", "mmdp.txt");

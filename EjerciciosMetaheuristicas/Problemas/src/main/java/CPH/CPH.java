@@ -28,8 +28,10 @@ public class CPH {
 			CPHInstance instance = new CPHInstance(fileIntance);
 			instance.loadInstance();
 			
-			CPHSolution solution = calculateSolutionRandom(instance, 5000);
-			elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
+			calculateGA(instance, 0);
+			//CPHSolution solution = calculateSolutionRandom(instance, 5000);
+			//elementsPrint.add(new ElementPrint(fileIntance.getName(), solution.getTotalWeight(), solution.toString()));
+			break;
 		}
 		
 		writeResults(elementsPrint, "CPH Random ", "cph.txt");
@@ -124,5 +126,12 @@ public class CPH {
 		System.out.print(bestSolutions.getBestSolution().getTotalWeight() + "\t" + bestSolutions.getBestSolution().toString() + "\n");
 						
 		return bestSolutions.getBestSolution();
+	}
+	
+	public static void calculateGA(CPHInstance instance, int solutions) {
+		CPHGa ga = new CPHGa(instance);
+		
+		ga.ga(instance);
+		
 	}
 }
